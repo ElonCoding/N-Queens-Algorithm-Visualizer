@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-Queens Algorithm Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h1 class="header__title">N-Queens Algorithm Visualizer</h1>
+        <p class="header__subtitle">Watch the backtracking algorithm solve the N-Queens problem step by step</p>
+    </header>
+
+    <main class="main">
+        <section class="controls">
+            <div class="controls__group">
+                <label for="board-size">Board Size:</label>
+                <select id="board-size" class="control__select">
+                    <option value="4">4×4</option>
+                    <option value="5" selected>5×5</option>
+                    <option value="6">6×6</option>
+                    <option value="7">7×7</option>
+                    <option value="8">8×8</option>
+                </select>
+            </div>
+            <div class="controls__group">
+                <label for="speed">Speed:</label>
+                <select id="speed" class="control__select">
+                    <option value="1000">Slow</option>
+                    <option value="500" selected>Normal</option>
+                    <option value="200">Fast</option>
+                    <option value="50">Very Fast</option>
+                </select>
+            </div>
+            <div class="controls__buttons">
+                <button id="start-btn" class="btn btn--primary">Start Visualization</button>
+                <button id="pause-btn" class="btn btn--secondary" disabled>Pause</button>
+                <button id="reset-btn" class="btn btn--secondary">Reset</button>
+            </div>
+        </section>
+
+        <section class="visualization">
+            <div class="board-container">
+                <div id="board" class="board"></div>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat__label">Solutions Found:</span>
+                        <span id="solutions-count" class="stat__value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__label">Current Row:</span>
+                        <span id="current-row" class="stat__value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat__label">Attempts:</span>
+                        <span id="attempts-count" class="stat__value">0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="explanation">
+            <h2>How the Algorithm Works</h2>
+            <div class="algorithm-steps">
+                <div class="step">
+                    <h3>Step 1: Place Queen</h3>
+                    <p>Try placing a queen in the current row, one column at a time.</p>
+                </div>
+                <div class="step">
+                    <h3>Step 2: Check Safety</h3>
+                    <p>Check if the queen can attack any previously placed queens.</p>
+                </div>
+                <div class="step">
+                    <h3>Step 3: Recurse or Backtrack</h3>
+                    <p>If safe, move to the next row. If not, try the next column.</p>
+                </div>
+                <div class="step">
+                    <h3>Step 4: Solution Found</h3>
+                    <p>When all queens are placed safely, we've found a solution!</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="solution-display">
+            <h2>Solutions</h2>
+            <div id="solutions-container" class="solutions-container"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 N-Queens Visualizer. Interactive algorithm demonstration.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
