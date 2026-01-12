@@ -176,6 +176,12 @@ class NQueensVisualizer {
         const cell = this.getCell(row, col);
         cell.textContent = '♛';
         cell.classList.add('queen');
+        
+        // Add animation
+        cell.style.animation = 'shake 0.3s ease-in-out';
+        setTimeout(() => {
+            cell.style.animation = '';
+        }, 300);
     }
     
     removeQueen(row, col) {
@@ -211,12 +217,20 @@ class NQueensVisualizer {
         this.solutions.push([...this.board]);
         this.displaySolution();
         this.updateStats();
+        
+        // Add celebration animation
+        const boardElement = this.boardElement;
+        boardElement.style.animation = 'pulse 1s ease-in-out';
+        setTimeout(() => {
+            boardElement.style.animation = '';
+        }, 1000);
     }
     
     displaySolution() {
         const solutionDiv = document.createElement('div');
         solutionDiv.className = 'solution-item';
         solutionDiv.innerHTML = `<strong>Solution ${this.solutions.length}</strong>`;
+        solutionDiv.style.animation = 'fadeIn 0.5s ease-out';
         
         const miniBoard = document.createElement('div');
         miniBoard.className = 'mini-board';
@@ -229,6 +243,7 @@ class NQueensVisualizer {
                 miniCell.classList.add((row + col) % 2 === 0 ? 'light' : 'dark');
                 if (this.board[row] === col) {
                     miniCell.textContent = '♛';
+                    miniCell.style.animation = 'fadeIn 0.3s ease-out';
                 }
                 miniBoard.appendChild(miniCell);
             }
