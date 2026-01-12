@@ -3,276 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Interactive N-Queens algorithm visualizer. Watch the backtracking algorithm solve the N-Queens problem step by step with beautiful animations and educational explanations.">
-    <meta name="keywords" content="N-Queens, algorithm, visualization, backtracking, chess, programming, computer science">
-    <meta name="author" content="N-Queens Visualizer">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="N-Queens Algorithm Visualizer">
-    <meta property="og:description" content="Interactive visualization of the N-Queens backtracking algorithm. Educational tool for understanding algorithmic problem solving.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://nqueens-visualizer.com">
-    <meta property="og:image" content="https://nqueens-visualizer.com/og-image.png">
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="N-Queens Algorithm Visualizer">
-    <meta name="twitter:description" content="Interactive visualization of the N-Queens backtracking algorithm.">
-    <meta name="twitter:image" content="https://nqueens-visualizer.com/twitter-image.png">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E♛%3C/text%3E%3C/svg%3E">
-    
-    <title>N-Queens Algorithm Visualizer | Interactive Educational Tool</title>
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="styles/main.css" as="style">
-    <link rel="preload" href="scripts/app.js" as="script">
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles/main.css">
-    
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "N-Queens Algorithm Visualizer",
-        "description": "Interactive visualization of the N-Queens backtracking algorithm",
-        "url": "https://nqueens-visualizer.com",
-        "applicationCategory": "EducationalApplication",
-        "operatingSystem": "Any",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        }
-    }
-    </script>
+    <title>N-Queens Visualizer</title>
+    <link rel="stylesheet" href="simple.css">
 </head>
 <body>
-    <!-- Skip to main content link for accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="container">
+        <h1>N-Queens Algorithm Visualizer</h1>
+        
+        <div class="controls">
+            <label>Board Size:
+                <select id="boardSize">
+                    <option value="4">4</option>
+                    <option value="5" selected>5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
+            </label>
+            
+            <label>Speed:
+                <select id="speed">
+                    <option value="2000">Slow</option>
+                    <option value="1000" selected>Normal</option>
+                    <option value="500">Fast</option>
+                    <option value="100">Very Fast</option>
+                </select>
+            </label>
+            
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn" disabled>Pause</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+        
+        <div class="board-container">
+            <div id="board"></div>
+        </div>
+        
+        <div class="stats">
+            <div>Solution: <span id="solutionCount">0</span></div>
+            <div>Attempts: <span id="attemptCount">0</span></div>
+            <div>Status: <span id="status">Ready</span></div>
+        </div>
+        
+        <div class="solutions" id="solutions">
+            <h3>Found Solutions:</h3>
+            <div id="solutionList"></div>
+        </div>
+    </div>
     
-    <!-- Header -->
-    <header class="header" role="banner">
-        <div class="container">
-            <div class="header__content">
-                <h1 class="header__title">
-                    <span class="header__icon" aria-hidden="true">♛</span>
-                    N-Queens Algorithm Visualizer
-                </h1>
-                <p class="header__subtitle">Interactive backtracking algorithm demonstration</p>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main id="main-content" class="main" role="main">
-        <div class="container">
-            <!-- Controls Section -->
-            <section class="controls-section" aria-labelledby="controls-heading">
-                <h2 id="controls-heading" class="visually-hidden">Visualization Controls</h2>
-                
-                <div class="controls-grid">
-                    <div class="control-group">
-                        <label for="board-size" class="control-label">Board Size</label>
-                        <select id="board-size" class="control-select" aria-describedby="board-size-help">
-                            <option value="4">4×4</option>
-                            <option value="5" selected>5×5</option>
-                            <option value="6">6×6</option>
-                            <option value="7">7×7</option>
-                            <option value="8">8×8</option>
-                        </select>
-                        <span id="board-size-help" class="help-text">Choose the size of the chess board</span>
-                    </div>
-                    
-                    <div class="control-group">
-                        <label for="speed" class="control-label">Animation Speed</label>
-                        <select id="speed" class="control-select" aria-describedby="speed-help">
-                            <option value="2000">Slow (2s)</option>
-                            <option value="1000" selected>Normal (1s)</option>
-                            <option value="500">Fast (0.5s)</option>
-                            <option value="100">Very Fast (0.1s)</option>
-                        </select>
-                        <span id="speed-help" class="help-text">Control how fast the algorithm runs</span>
-                    </div>
-                    
-                    <div class="control-group control-group--buttons">
-                        <button id="start-btn" class="btn btn--primary" aria-describedby="start-help">
-                            <span class="btn__icon" aria-hidden="true">▶</span>
-                            Start Visualization
-                        </button>
-                        <span id="start-help" class="help-text">Begin the algorithm demonstration</span>
-                        
-                        <button id="pause-btn" class="btn btn--secondary" disabled aria-describedby="pause-help">
-                            <span class="btn__icon" aria-hidden="true">⏸</span>
-                            Pause
-                        </button>
-                        <span id="pause-help" class="help-text">Pause the current visualization</span>
-                        
-                        <button id="reset-btn" class="btn btn--secondary" aria-describedby="reset-help">
-                            <span class="btn__icon" aria-hidden="true">↻</span>
-                            Reset
-                        </button>
-                        <span id="reset-help" class="help-text">Reset the board and clear solutions</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Visualization Section -->
-            <section class="visualization-section" aria-labelledby="visualization-heading">
-                <h2 id="visualization-heading" class="visually-hidden">Board Visualization</h2>
-                
-                <div class="visualization-container">
-                    <div class="board-wrapper">
-                        <div id="board" class="board" role="img" aria-label="Chess board visualization"></div>
-                        <div class="board-legend">
-                            <div class="legend-item">
-                                <span class="legend-color legend-color--current"></span>
-                                <span class="legend-text">Current Position</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color legend-color--safe"></span>
-                                <span class="legend-text">Safe Position</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color legend-color--unsafe"></span>
-                                <span class="legend-text">Unsafe Position</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Statistics -->
-                    <div class="stats-panel">
-                        <h3 class="stats-title">Algorithm Statistics</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <span class="stat-label">Solutions Found</span>
-                                <span id="solutions-count" class="stat-value" aria-live="polite">0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Current Row</span>
-                                <span id="current-row" class="stat-value" aria-live="polite">0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Total Attempts</span>
-                                <span id="attempts-count" class="stat-value" aria-live="polite">0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Progress</span>
-                                <div class="progress-bar">
-                                    <div id="progress-fill" class="progress-fill" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <span id="progress-text" class="progress-text">0%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Algorithm Explanation -->
-            <section class="explanation-section" aria-labelledby="explanation-heading">
-                <div class="section-header">
-                    <h2 id="explanation-heading" class="section-title">How the Algorithm Works</h2>
-                    <p class="section-subtitle">Understanding the backtracking approach to solve the N-Queens problem</p>
-                </div>
-                
-                <div class="algorithm-steps">
-                    <article class="step-card">
-                        <div class="step-header">
-                            <span class="step-number" aria-hidden="true">1</span>
-                            <h3 class="step-title">Place Queen</h3>
-                        </div>
-                        <p class="step-description">Try placing a queen in the current row, testing each column position systematically.</p>
-                        <div class="step-visual">
-                            <div class="mini-board">
-                                <div class="mini-cell mini-cell--queen">♛</div>
-                                <div class="mini-cell"></div>
-                                <div class="mini-cell"></div>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <article class="step-card">
-                        <div class="step-header">
-                            <span class="step-number" aria-hidden="true">2</span>
-                            <h3 class="step-title">Check Safety</h3>
-                        </div>
-                        <p class="step-description">Verify that the new queen doesn't conflict with any previously placed queens.</p>
-                        <div class="step-visual">
-                            <div class="mini-board">
-                                <div class="mini-cell mini-cell--safe">✓</div>
-                                <div class="mini-cell mini-cell--unsafe">✗</div>
-                                <div class="mini-cell"></div>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <article class="step-card">
-                        <div class="step-header">
-                            <span class="step-number" aria-hidden="true">3</span>
-                            <h3 class="step-title">Recurse or Backtrack</h3>
-                        </div>
-                        <p class="step-description">If the position is safe, move to the next row. Otherwise, try the next column.</p>
-                        <div class="step-visual">
-                            <div class="mini-board">
-                                <div class="mini-cell mini-cell--arrow">↓</div>
-                                <div class="mini-cell mini-cell--arrow">←</div>
-                                <div class="mini-cell"></div>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <article class="step-card">
-                        <div class="step-header">
-                            <span class="step-number" aria-hidden="true">4</span>
-                            <h3 class="step-title">Solution Found</h3>
-                        </div>
-                        <p class="step-description">When all queens are placed safely, we've successfully found a valid solution!</p>
-                        <div class="step-visual">
-                            <div class="mini-board">
-                                <div class="mini-cell mini-cell--success">★</div>
-                                <div class="mini-cell"></div>
-                                <div class="mini-cell"></div>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            </section>
-
-            <!-- Solutions Gallery -->
-            <section class="solutions-section" aria-labelledby="solutions-heading">
-                <div class="section-header">
-                    <h2 id="solutions-heading" class="section-title">Found Solutions</h2>
-                    <p class="section-subtitle">All valid queen arrangements discovered by the algorithm</p>
-                </div>
-                
-                <div id="solutions-container" class="solutions-gallery" role="region" aria-live="polite" aria-atomic="false">
-                    <div class="solutions-placeholder">
-                        <span class="placeholder-icon">♛</span>
-                        <p class="placeholder-text">Start the visualization to discover solutions</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <div class="footer-content">
-                <p class="footer-text">
-                    <span class="footer-icon" aria-hidden="true">♛</span>
-                    N-Queens Algorithm Visualizer - Interactive Educational Tool
-                </p>
-                <p class="footer-copyright">© 2024 Designed for educational purposes</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="scripts/app.js" defer></script>
+    <script src="simple.js"></script>
 </body>
 </html>
